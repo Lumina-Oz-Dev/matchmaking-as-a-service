@@ -1,45 +1,51 @@
 export interface Match {
-  id: string;
+  matchId: string;
+  players: string[];
   gameMode: string;
-  players: string[]; // Player IDs
-  status: MatchStatus;
   region: string;
-  averageSkillRating: number;
-  maxLatency: number;
-  lobbyId?: string;
-  createdAt: Date;
-  startedAt?: Date;
-  endedAt?: Date;
-  result?: MatchResult;
+  skillRatingRange: SkillRange;
+  averageLatency: number;
+  status: MatchStatus;
+  createdAt: number;
+  startedAt?: number;
+  endedAt?: number;
+  serverDetails?: ServerDetails;
+}
+
+export interface SkillRange {
+  min: number;
+  max: number;
+  average: number;
 }
 
 export enum MatchStatus {
   PENDING = 'pending',
   STARTING = 'starting',
   IN_PROGRESS = 'in_progress',
-  COMPLETED = 'completed',
+  FINISHED = 'finished',
   CANCELLED = 'cancelled'
 }
 
-export interface MatchResult {
-  winners: string[]; // Player IDs
-  losers: string[]; // Player IDs
-  draws?: string[]; // Player IDs for draw scenarios
-  duration: number; // in seconds
-  skillChanges: SkillChange[];
-}
-
-export interface SkillChange {
-  playerId: string;
-  oldRating: number;
-  newRating: number;
-  change: number;
+export interface ServerDetails {
+  serverId: string;
+  serverIp: string;
+  serverPort: number;
+  region: string;
+  gameVersion: string;
 }
 
 export interface MatchmakingRequest {
   playerId: string;
   gameMode: string;
-  region: string;
-  timestamp: Date;
-  priority: number;
+  region?: string;
+  maxWaitTime?: number;
+  skillRatingOverride?: number;
+}
+
+export interface MatchmakingResponse {
+  success: boolean;
+  matchId?: string;
+  estimatedWaitTime?: number;
+  queuePosition?: number;
+  error?: string;
 }

@@ -1,36 +1,50 @@
 export interface Lobby {
-  id: string;
-  matchId: string;
+  lobbyId: string;
   players: LobbyPlayer[];
-  status: LobbyStatus;
+  maxPlayers: number;
   gameMode: string;
   region: string;
-  serverEndpoint?: string;
-  createdAt: Date;
-  expiresAt: Date;
+  status: LobbyStatus;
+  createdAt: number;
   settings: LobbySettings;
+  host: string;
 }
 
 export interface LobbyPlayer {
   playerId: string;
-  username: string;
   skillRating: number;
   latency: number;
-  joinedAt: Date;
-  ready: boolean;
+  isReady: boolean;
+  joinedAt: number;
+  role?: string;
 }
 
 export enum LobbyStatus {
   WAITING = 'waiting',
   READY = 'ready',
   STARTING = 'starting',
-  ACTIVE = 'active',
-  EXPIRED = 'expired'
+  DISBANDED = 'disbanded'
 }
 
 export interface LobbySettings {
-  maxPlayers: number;
-  readyTimeoutSeconds: number;
-  allowSpectators: boolean;
-  gameConfiguration: Record<string, any>;
+  skillRatingRange: SkillRange;
+  maxLatency: number;
+  autoStart: boolean;
+  readyTimeout: number;
+  gameMode: string;
+  isPrivate: boolean;
+  password?: string;
+}
+
+export interface LobbyJoinRequest {
+  playerId: string;
+  lobbyId: string;
+  password?: string;
+}
+
+export interface LobbyCreateRequest {
+  playerId: string;
+  gameMode: string;
+  region: string;
+  settings: Partial<LobbySettings>;
 }

@@ -1,23 +1,28 @@
 export interface Player {
-  id: string;
-  username: string;
+  playerId: string;
   skillRating: number;
-  region: string;
   latency: number;
-  preferences: MatchPreferences;
+  region: string;
+  queueTime: number;
+  preferences: PlayerPreferences;
+  matchHistory: MatchResult[];
   status: PlayerStatus;
-  createdAt: Date;
-  updatedAt: Date;
+  gameMode: string;
 }
 
-export interface MatchPreferences {
-  gameMode: string;
+export interface PlayerPreferences {
   maxLatency: number;
-  skillRange: {
-    min: number;
-    max: number;
-  };
-  regions: string[];
+  skillRangeTolerance: number;
+  preferredRegions: string[];
+  gameMode: string;
+}
+
+export interface MatchResult {
+  matchId: string;
+  result: 'win' | 'loss' | 'draw';
+  skillRatingChange: number;
+  timestamp: number;
+  opponents: string[];
 }
 
 export enum PlayerStatus {
@@ -28,16 +33,12 @@ export enum PlayerStatus {
 }
 
 export interface PlayerStats {
-  playerId: string;
+  totalMatches: number;
   wins: number;
   losses: number;
   draws: number;
+  winRate: number;
   averageLatency: number;
-  skillHistory: SkillRatingEntry[];
-}
-
-export interface SkillRatingEntry {
-  rating: number;
-  timestamp: Date;
-  matchId?: string;
+  currentStreak: number;
+  maxStreak: number;
 }
